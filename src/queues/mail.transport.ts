@@ -1,6 +1,7 @@
 import { config } from '@notifications/config';
+import { winstonLogger } from '@tjgto/jobber_helper';
 import { emailTemplates } from '@notifications/helpers';
-import { IEmailLocals, winstonLogger } from '@uzochukwueddie/jobber-shared';
+import { IEmailLocals } from '@tjgto/jobber_helper';
 import { Logger } from 'winston';
 
 const log: Logger = winstonLogger(`${config.ELASTIC_SEARCH_URL}`, 'mailTransport', 'debug');

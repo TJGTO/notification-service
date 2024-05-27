@@ -40,6 +40,7 @@
   },
   "dependencies": {
     "@elastic/elasticsearch": "^8.10.0",
+    "@tjgto/jobber_helper": "npm:@TJGTO/jobber_helper@^0.0.2",
     "amqplib": "^0.10.3",
     "dotenv": "^16.3.1",
     "ejs": "^3.1.9",

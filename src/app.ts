@@ -1,4 +1,4 @@
-import { winstonLogger } from '@uzochukwueddie/jobber-shared';
+import { winstonLogger } from '@tjgto/jobber_helper';
 import { Logger } from 'winston';
 import { config } from '@notifications/config';
 import express, { Express } from 'express';

@@ -1,7 +1,7 @@
 import 'express-async-errors';
 import http from 'http';
 
-import { winstonLogger } from '@uzochukwueddie/jobber-shared';
+import { winstonLogger } from '@tjgto/jobber_helper';
 import { Logger } from 'winston';
 import { config } from '@notifications/config';
 import { Application } from 'express';
@@ -18,12 +18,16 @@ export function start(app: Application): void {
   startServer(app);
   app.use('', healthRoutes());
   startQueues();
+  console.log('**************', config.ELASTIC_SEARCH_URL);
   startElasticSearch();
 }
 
 async function startQueues(): Promise<void> {
-  const emailChannel: Channel = await createConnection() as Channel;
+  const emailChannel: Channel = (await createConnection()) as Channel;
   await consumeAuthEmailMessages(emailChannel);
+  await emailChannel.assertExchange('jobber-email-notification', 'direct');
+  const message = JSON.stringify({ name: 'Tathagata', service: 'notificaion service' });
+  emailChannel.publish('jobber-email-notification', 'auth-email', Buffer.from(message));
   await consumeOrderEmailMessages(emailChannel);
 }
 

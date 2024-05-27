@@ -1,5 +1,5 @@
 import { config } from '@notifications/config';
-import { winstonLogger } from '@uzochukwueddie/jobber-shared';
+import { winstonLogger } from '@tjgto/jobber_helper';
 import client, { Channel, Connection } from 'amqplib';
 import { Logger } from 'winston';
 
@@ -25,4 +25,4 @@ function closeConnection(channel: Channel, connection: Connection): void {
   });
 }
 
-export { createConnection } ;
+export { createConnection };

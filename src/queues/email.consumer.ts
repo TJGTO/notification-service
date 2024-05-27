@@ -1,7 +1,8 @@
 import { config } from '@notifications/config';
-import { IEmailLocals, winstonLogger } from '@uzochukwueddie/jobber-shared';
+import { IEmailLocals } from '@tjgto/jobber_helper';
 import { Channel, ConsumeMessage } from 'amqplib';
 import { Logger } from 'winston';
+import { winstonLogger } from '@tjgto/jobber_helper';
 import { createConnection } from '@notifications/queues/connection';
 import { sendEmail } from '@notifications/queues/mail.transport';
 
@@ -10,7 +11,7 @@ const log: Logger = winstonLogger(`${config.ELASTIC_SEARCH_URL}`, 'emailConsumer
 async function consumeAuthEmailMessages(channel: Channel): Promise<void> {
   try {
     if (!channel) {
-      channel = await createConnection() as Channel;
+      channel = (await createConnection()) as Channel;
     }
     const exchangeName = 'jobber-email-notification';
     const routingKey = 'auth-email';
@@ -19,6 +20,7 @@ async function consumeAuthEmailMessages(channel: Channel): Promise<void> {
     const jobberQueue = await channel.assertQueue(queueName, { durable: true, autoDelete: false });
     await channel.bindQueue(jobberQueue.queue, exchangeName, routingKey);
     channel.consume(jobberQueue.queue, async (msg: ConsumeMessage | null) => {
+      const message = JSON.parse(msg!.content.toString());
       const { receiverEmail, username, verifyLink, resetLink, template } = JSON.parse(msg!.content.toString());
       const locals: IEmailLocals = {
         appLink: `${config.CLIENT_URL}`,
@@ -38,7 +40,7 @@ async function consumeAuthEmailMessages(channel: Channel): Promise<void> {
 async function consumeOrderEmailMessages(channel: Channel): Promise<void> {
   try {
     if (!channel) {
-      channel = await createConnection() as Channel;
+      channel = (await createConnection()) as Channel;
     }
     const exchangeName = 'jobber-order-notification';
     const routingKey = 'order-email';

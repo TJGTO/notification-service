@@ -1,7 +1,7 @@
 import { Client } from '@elastic/elasticsearch';
 import { ClusterHealthResponse } from '@elastic/elasticsearch/lib/api/types';
 import { config } from '@notifications/config';
-import { winstonLogger } from '@uzochukwueddie/jobber-shared';
+import { winstonLogger } from '@tjgto/jobber_helper';
 import { Logger } from 'winston';
 
 const log: Logger = winstonLogger(`${config.ELASTIC_SEARCH_URL}`, 'notificationElasticSearchServer', 'debug');
@@ -12,9 +12,11 @@ const elasticSearchClient = new Client({
 
 export async function checkConnection(): Promise<void> {
   let isConnected = false;
+
   while (!isConnected) {
     try {
       const health: ClusterHealthResponse = await elasticSearchClient.cluster.health({});
+      console.log(health.status);
       log.info(`NotificationService Elasticsearch health status - ${health.status}`);
       isConnected = true;
     } catch (error) {
